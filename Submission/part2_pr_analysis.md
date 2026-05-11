@@ -20,12 +20,13 @@ This PR adds support for configuring LDAP authentication in Archivematica using 
 
 The update allows Archivematica to automatically load LDAP-related settings from environment variables starting with `AUTH_LDAP_`. The PR also adds automatic user profile creation after successful LDAP login. In addition, some internal import handling was updated to support the new authentication workflow properly.
 
-Overall, the PR improves deployment flexibility, authentication management, and security for organizations using LDAP-based login systems.
+The changes mainly make LDAP setup easier to manage, especially in Docker-based deployments where environment variables are commonly used.
 
 ### Technical Changes
 
 * **Modified:** LDAP authentication configuration handling
     * Added support for `AUTH_LDAP_*` environment variables
+    * LDAP-related settings are now loaded from environment variables instead of only static configuration files
 
 * **Added:** Signals module
     * Automatically creates user profiles after LDAP login
@@ -41,7 +42,7 @@ Overall, the PR improves deployment flexibility, authentication management, and 
 
 ### Implementation Approach
 
-The implementation mainly focuses on replacing static LDAP configuration with environment variable support. Instead of manually editing configuration files, administrators can now provide LDAP settings dynamically through environment variables during deployment.
+Most of the implementation work focuses on moving LDAP configuration handling away from static project settings and into environment-based configuration . Instead of manually editing configuration files, administrators can now provide LDAP settings dynamically through environment variables during deployment.
 
 The application checks for variables starting with `AUTH_LDAP_` and uses them to configure LDAP authentication automatically. This approach is especially useful in containerized deployments because sensitive credentials no longer need to be stored directly inside project files.
 
@@ -51,7 +52,7 @@ To verify the changes, the developer used a Docker-based LDAP test environment a
 
 ### Potential Impact
 
-This PR mainly affects the authentication and deployment workflow of Archivematica. Organizations using LDAP authentication can now configure the application more easily in Docker or cloud-based environments without manually editing configuration files.
+This PR mainly affects the authentication and deployment workflow of Archivematica. Organizations using LDAP authentication can now configure the application more easily in Docker or cloud-based environments without manually editing configuration files. This type of setup is also easier to maintain in shared deployment environments where configuration values may differ between systems.
 
 The changes also improve security by reducing direct exposure of sensitive credentials. Since authentication handling was updated, related backend components and deployment configurations may also be affected.
 
@@ -67,7 +68,7 @@ This PR improves Archivematica’s support for external automation tools by addi
 
 The new endpoints allow external tools to trigger transfers remotely using API keys instead of browser-based login sessions. The PR also adds endpoints for checking SIP and transfer status, retrieving units waiting for user input, and returning UUID values for easier tracking of transfers.
 
-In addition, the code includes some cleanup and formatting improvements to maintain consistency with Python coding standards. Overall, the PR makes Archivematica easier to integrate with automated workflows and external management systems.
+In addition, the code includes some cleanup and formatting improvements to maintain consistency with Python coding standards. These changes make it easier for external tools to interact with Archivematica without depending completely on the web dashboard.
 
 ### Technical Changes
 
@@ -90,7 +91,7 @@ In addition, the code includes some cleanup and formatting improvements to maint
 
 The PR extends Archivematica’s dashboard API to support external automation tools more effectively. New API routes were added so external applications can trigger transfers and monitor workflow progress without requiring direct access to the web dashboard.
 
-Authentication for these endpoints is handled using API keys through Archivematica’s existing API authentication system , which allows scripts and automation systems to communicate securely with Archivematica. The implementation also introduces status endpoints that return processing information for SIPs and transfers. This helps external systems track progress and detect failures automatically.
+Authentication for these endpoints is handled using API keys through Archivematica’s existing API authentication system , which allows scripts and automation systems to communicate securely with Archivematica. The implementation also introduces status endpoints that return processing information for SIPs and transfers. This gives external tools a simpler way to track workflow progress and identify failed transfers.
 
 Another addition was an endpoint that identifies units currently paused for manual input. This makes it easier for automation tools to detect workflows that still require user interaction.
 
