@@ -2,7 +2,7 @@
 
 ## Task 1.1: Python Repository Selection
 
-The following table compares all five repositories based on their Python usage, project purpose, dependencies, architecture patterns, and target domain.
+I reviewed all five repositories to understand how heavily they rely on Python along with their architecture, dependencies, and primary use cases.
 
 ## Repository Comparison Table
 
@@ -40,9 +40,12 @@ aiokafka is a Python Kafka client built for the `asyncio` framework. It allows P
 - **packaging**: Handles version-related utilities  
 
 **Architecture Patterns:**  
-- **Async/await model**: Uses Python asyncio features  
-- **Producer-consumer pattern**: Supports Kafka producers and consumers  
-- **Event-driven communication**: Handles message flow asynchronously  
+
+- **Async consumer-producer structure:** Main consumer and producer logic is separated into `aiokafka/consumer/` and `aiokafka/producer/` modules  
+- **Producer-consumer communication pattern:** Supports asynchronous Kafka producers and consumers for message streaming  
+- **Event-driven processing:** Uses asyncio-based fetch loops and background tasks for non-blocking message handling  
+- **Consumer group coordination:** Handles partition assignment and offset management for Kafka consumer groups  
+- **Separate protocol handling layer:** Kafka protocol parsing and client communication are managed independently from consumer logic
 
 **Target Domain:**  
 Used in async backend applications, streaming systems, and microservice-based projects.
@@ -57,12 +60,14 @@ airbyte is an open-source data integration platform used to move data between AP
 **Key Dependencies:**  
 - **airbyte-cdk**: Framework for building connectors  
 - **Docker**: Containerized deployment  
-- **Java/Kotlin services**: Core backend platform  
+- **Java/Kotlin services**: Core backend platform
 
 **Architecture Patterns:**  
-- **Connector-based architecture**: Separate connectors for different sources and destinations  
-- **Microservices architecture**: Different services manage syncing and workflows  
-- **Pipeline workflow**: Handles data movement between systems  
+
+- **Connector-based structure:** Main connectors are organized inside the `airbyte-integrations/` directory with separate source and destination modules  
+- **Independent connector execution:** Each connector runs separately from the core platform during sync operations  
+- **Microservice-style deployment:** Different platform services run in isolated Docker containers  
+- **Pipeline-based data flow:** Data moves through extraction, normalization, and loading stages between systems
 
 **Target Domain:**  
 Used by data engineering teams for ETL and ELT pipelines.
@@ -84,10 +89,11 @@ archivematica is a digital preservation system used for storing and managing dig
 - **Elasticsearch**: Search and indexing  
 
 **Architecture Patterns:**  
-- **Workflow-based microservices**: Different services handle preservation tasks  
-- **Task queue processing**: Jobs are managed through worker systems  
-- **Django web architecture**: Dashboard and management interface  
-
+- **Workflow-based processing:** Preservation workflows are managed through MCP services and ingest pipelines  
+- **Task queue handling:** Background jobs are processed using Gearman workers and MCP task management services  
+- **Django-based dashboard structure:** The web interface and management system are built around Django applications  
+- **Service-oriented backend design:** Different preservation and processing tasks are separated into independent backend services
+  
 **Target Domain:**  
 Used in organizations that need secure digital preservation and archival management.
 
@@ -105,10 +111,11 @@ beets is a command-line music library manager that helps users organize and tag 
 - **requests**: API communication  
 
 **Architecture Patterns:**  
-- **Plugin-based architecture**: Features can be extended using plugins  
-- **CLI-focused design**: Mainly operated through terminal commands  
-- **Import pipeline workflow**: Processes music files in stages  
-
+- **Plugin-based architecture:** Most optional features and extensions are organized through the `beetsplug/` directory  
+- **CLI-focused design:** The application is mainly operated through command-line tools and configuration files  
+- **Event and hook system:** Plugins can extend import and metadata behavior using hooks and event handling  
+- **Import pipeline workflow:** Music files are processed in multiple stages during library import
+  
 **Target Domain:**  
 Used by users managing large music collections and audio libraries.
 
@@ -126,9 +133,11 @@ MetaGPT is a multi-agent AI framework where different AI agents handle software 
 - **AsyncIO**: Asynchronous task handling  
 
 **Architecture Patterns:**  
-- **Multi-agent architecture**: Multiple AI agents work together  
-- **Role-based workflow**: Different agents perform different tasks  
-- **Message-based communication**: Agents exchange information during execution  
+
+- **Multi-agent architecture:** Different AI agents are separated into dedicated role modules for tasks like planning, coding, and reviewing  
+- **Role-based workflow system:** Each agent handles a specific responsibility during execution  
+- **Structured message communication:** Agents exchange task updates and responses through internal messaging flows  
+- **Workflow coordination between agents:** Tasks move through multiple agent roles in a defined sequence
 
 **Target Domain:**  
 Used for AI-assisted software development and multi-agent research projects.
