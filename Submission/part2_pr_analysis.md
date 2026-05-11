@@ -31,7 +31,7 @@ Overall, the PR improves deployment flexibility, authentication management, and 
     * Automatically creates user profiles after LDAP login
 
 * **Modified:** MCPClient import handling
-    * Updated imports to support the new authentication flow
+   * Updated import handling to support the new LDAP environment-based authentication flow
 
 * **Added:** Docker-based LDAP testing setup
     * Created isolated environment for LDAP authentication testing
@@ -90,7 +90,7 @@ In addition, the code includes some cleanup and formatting improvements to maint
 
 The PR extends Archivematica’s dashboard API to support external automation tools more effectively. New API routes were added so external applications can trigger transfers and monitor workflow progress without requiring direct access to the web dashboard.
 
-Authentication for these operations is handled using API keys, which allows scripts and automation systems to communicate securely with Archivematica. The implementation also introduces status endpoints that return processing information for SIPs and transfers. This helps external systems track progress and detect failures automatically.
+Authentication for these endpoints is handled using API keys through Archivematica’s existing API authentication system , which allows scripts and automation systems to communicate securely with Archivematica. The implementation also introduces status endpoints that return processing information for SIPs and transfers. This helps external systems track progress and detect failures automatically.
 
 Another addition was an endpoint that identifies units currently paused for manual input. This makes it easier for automation tools to detect workflows that still require user interaction.
 
