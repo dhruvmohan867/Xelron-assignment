@@ -37,17 +37,17 @@ Before this update, LDAP setup required more manual configuration and additional
 
 To consider this PR successfully implemented, the following criteria must be met:
 
-1. ✓ When `AUTH_LDAP_*` environment variables are provided, the system should automatically load LDAP configuration settings.
+1. When `AUTH_LDAP_*` environment variables are provided, the system should automatically load LDAP configuration settings.
 
-2. ✓ Users should be able to authenticate successfully using valid LDAP credentials.
+2. Users should be able to authenticate successfully using valid LDAP credentials.
 
-3. ✓ A user profile should be created automatically after the first successful LDAP login.
+3. A user profile should be created automatically after the first successful LDAP login.
 
-4. ✓ Invalid or missing LDAP configuration values should return proper authentication or configuration errors.
+4. Invalid or missing LDAP configuration values should return proper authentication or configuration errors.
 
-5. ✓ LDAP authentication should work correctly in Docker-based deployment environments.
+5. LDAP authentication should work correctly in Docker-based deployment environments.
 
-6. ✓ Existing non-LDAP authentication workflows should continue working without being affected.
+6. Existing non-LDAP authentication workflows should continue working without being affected.
 
 ---
 
@@ -56,19 +56,19 @@ To consider this PR successfully implemented, the following criteria must be met
 The implementation should handle the following edge cases:
 
 1. **Missing LDAP Environment Variables**  
-   If important `AUTH_LDAP_*` environment variables are not provided, the system should return a clear configuration error instead of crashing during startup.
+   If required `AUTH_LDAP_*` environment variables are missing, the application should return a clear configuration error instead of failing during startup.
 
 2. **Invalid LDAP Credentials or Server Details**  
-   If the LDAP server address, username, password, or search filters are incorrect, the login attempt should fail safely without exposing sensitive information.
+   If the LDAP server address, username, password, or search filters are incorrect, authentication should fail safely without exposing sensitive information.
 
 3. **User Profile Creation Failure**  
-   If LDAP authentication succeeds but the dashboard profile cannot be created because of a database or permission issue, the system should handle the error properly and avoid incomplete user records.
+   If LDAP authentication succeeds but dashboard profile creation fails because of a database or permission issue, the system should handle the error properly and avoid incomplete user records.
 
 4. **Docker Container Cannot Reach LDAP Server**  
-   If the application is running inside Docker and the LDAP server is unreachable because of networking or DNS issues, the system should return a proper connection-related error.
+   If the application is running inside Docker and the LDAP server cannot be reached because of networking or DNS issues, the system should return a proper connection-related error.
 
-5. **Existing Authentication Methods Still Working**  
-   The new LDAP environment variable setup should not break existing non-LDAP authentication workflows already configured in the system.
+5. **Existing Authentication Methods Continue Working**  
+   The LDAP environment variable setup should not break existing non-LDAP authentication methods already configured in the system.
 
 ---
 
@@ -92,41 +92,73 @@ The implementation should also support automatic user profile creation after suc
 ### Technical Requirements
 
 1. Add support for reading LDAP configuration values from environment variables.
+
 2. Ensure the application checks for `AUTH_LDAP_*` variables during startup.
+
 3. Update authentication handling to use dynamically loaded LDAP settings.
+
 4. Add automatic dashboard user profile creation after successful LDAP login.
+
 5. Ensure the implementation works correctly in Docker-based environments.
+
 6. Maintain compatibility with existing authentication workflows.
 
 ### Acceptance Criteria
 
-Reference the acceptance criteria defined in Section 3.3 above. The implementation must support successful LDAP authentication, automatic user creation, proper error handling, and Docker compatibility.
+The implementation should meet the following requirements:
+
+1. LDAP configuration values should load automatically from `AUTH_LDAP_*` environment variables during startup.
+
+2. Users should be able to authenticate successfully using valid LDAP credentials.
+
+3. A dashboard user profile should be created automatically after the first successful LDAP login.
+
+4. Invalid or missing LDAP configuration values should return proper authentication or configuration errors.
+
+5. LDAP authentication should work correctly in Docker-based deployment environments.
+
+6. Existing non-LDAP authentication methods should continue working without being affected.
 
 ### Edge Cases to Consider
 
-Pay attention to the edge cases defined in Section 3.4, including:
-- Missing LDAP environment variables
-- Invalid LDAP server configuration
-- Profile creation failures
-- Docker networking or LDAP connection issues
+The implementation should safely handle the following situations:
+
+- Missing required `AUTH_LDAP_*` environment variables during startup
+
+- Incorrect LDAP server details, credentials, or search filters
+
+- LDAP authentication succeeds but dashboard profile creation fails
+
+- Docker containers cannot connect to the LDAP server because of networking or DNS issues
+
+- Existing non-LDAP authentication workflows should continue functioning correctly
 
 ### Testing Requirements
 
 The implementation should include tests that:
 
 1. Verify LDAP configuration loading from environment variables
+
 2. Confirm successful LDAP authentication
+
 3. Validate automatic user profile creation
+
 4. Test failure handling for invalid LDAP settings
+
 5. Verify Docker-based LDAP integration works correctly
 
 ### Deliverables
 
 - Updated LDAP authentication configuration handling
+
 - Support for `AUTH_LDAP_*` environment variables
+
 - Automatic user profile creation logic
+
 - Updated authentication-related backend components
+
 - Docker-based LDAP testing setup
+
 - Updated tests and related documentation if required
 
 ---
