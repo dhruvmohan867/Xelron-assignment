@@ -11,7 +11,7 @@
 
 Archivematica is an open-source digital preservation system used for storing and managing digital records for long-term access. It is mainly used by libraries, museums, archives, and other organizations that need to preserve important digital files such as documents, images, videos, and datasets. The platform helps institutions organize, process, and safely store digital content while following archival preservation standards.
 
-The repository contains multiple backend services along with a Django-based dashboard used to manage workflows related to ingestion, processing, storage, and preservation tasks. Archivematica also integrates with external tools for operations like virus scanning, metadata extraction, file validation, and indexing.
+While reviewing the repository, I noticed that most workflow handling is managed through backend services and Django dashboard modules related to ingestion, processing, and preservation tasks. The project also integrates with external tools for operations such as virus scanning, metadata extraction, file validation, and indexing.
 
 The main users of Archivematica are archivists, system administrators, and digital preservation teams responsible for maintaining large collections of digital records. Since many organizations already use centralized authentication systems such as LDAP, the application needs flexible and secure authentication support.
 
@@ -27,9 +27,11 @@ This Pull Request adds support for configuring LDAP authentication using environ
 
 The PR introduces support for environment variables prefixed with `AUTH_LDAP_`. During application startup, Archivematica checks for these variables and automatically loads the required LDAP configuration values. This allows administrators to manage authentication settings dynamically without modifying internal project files.
 
-Another important change introduced in this PR is automatic user profile creation after successful LDAP authentication. When a user logs in through LDAP for the first time, Archivematica automatically creates the required dashboard profile information.
+The PR also adds automatic user profile creation after successful LDAP authentication. When a user logs in through LDAP for the first time, Archivematica automatically creates the required dashboard profile information.
 
 Before this update, LDAP setup required more manual configuration and additional user management steps. After the implementation, LDAP deployment becomes easier, more secure, and better suited for Docker-based deployments and automated infrastructure setups.
+
+This type of configuration is commonly used in container-based deployments because credentials can be managed without directly editing project files.
 
 ---
 
@@ -37,17 +39,17 @@ Before this update, LDAP setup required more manual configuration and additional
 
 To consider this PR successfully implemented, the following criteria must be met:
 
-1. When `AUTH_LDAP_*` environment variables are provided, the system should automatically load LDAP configuration settings.
+1. When `AUTH_LDAP_*` environment variables are provided, the system must automatically load LDAP configuration settings.
 
-2. Users should be able to authenticate successfully using valid LDAP credentials.
+2. Users must be able to authenticate successfully using valid LDAP credentials.
 
-3. A user profile should be created automatically after the first successful LDAP login.
+3. A user profile must be created automatically after the first successful LDAP login.
 
-4. Invalid or missing LDAP configuration values should return proper authentication or configuration errors.
+4. Invalid or missing LDAP configuration values must return proper authentication or configuration errors.
 
-5. LDAP authentication should work correctly in Docker-based deployment environments.
+5. LDAP authentication must work correctly in Docker-based deployment environments.
 
-6. Existing non-LDAP authentication workflows should continue working without being affected.
+6. Existing non-LDAP authentication workflows must continue working without being affected.
 
 ---
 
@@ -81,7 +83,7 @@ The implementation should handle the following edge cases:
 
 Archivematica is a digital preservation platform used by libraries, museums, and archives for managing long-term storage and preservation workflows. The current LDAP authentication setup requires administrators to manually edit configuration files and store LDAP credentials directly inside the application configuration.
 
-The goal of this implementation is to improve deployment flexibility by allowing LDAP settings to be loaded dynamically through environment variables. The feature should also support Docker-based deployments and simplify authentication management for organizations already using LDAP systems.
+The main goal here is to make LDAP setup easier to manage in Docker and deployment environments where configuration values may change between systems. It also reduces the need to manually edit configuration files during deployment.
 
 ### Objective
 
@@ -96,12 +98,14 @@ The implementation should also support automatic user profile creation after suc
 2. Ensure the application checks for `AUTH_LDAP_*` variables during startup.
 
 3. Update authentication handling to use dynamically loaded LDAP settings.
+   
+4. The implementation may require updates in authentication-related Django settings and dashboard authentication modules.
 
-4. Add automatic dashboard user profile creation after successful LDAP login.
+5. Add automatic dashboard user profile creation after successful LDAP login.
 
-5. Ensure the implementation works correctly in Docker-based environments.
+6. Ensure the implementation works correctly in Docker-based environments.
 
-6. Maintain compatibility with existing authentication workflows.
+7. Maintain compatibility with existing authentication workflows.
 
 ### Acceptance Criteria
 
@@ -135,7 +139,7 @@ The implementation should safely handle the following situations:
 
 ### Testing Requirements
 
-The implementation should include tests that:
+The following areas should be tested during implementation:
 
 1. Verify LDAP configuration loading from environment variables
 
