@@ -41,7 +41,7 @@ aiokafka is a Python Kafka client built for the `asyncio` framework. It allows P
 
 **Architecture Patterns:**  
 
-- **Async consumer-producer structure:** Main consumer and producer logic is separated into `aiokafka/consumer/` and `aiokafka/producer/` modules  
+- **Async consumer-producer structure:** Main consumer and producer logic is separated into `aiokafka/consumer/consumer.py` and `aiokafka/producer/producer.py` modules  
 - **Producer-consumer communication pattern:** Supports asynchronous Kafka producers and consumers for message streaming  
 - **Event-driven processing:** Uses asyncio-based fetch loops and background tasks for non-blocking message handling  
 - **Consumer group coordination:** Handles partition assignment and offset management for Kafka consumer groups  
@@ -64,7 +64,7 @@ airbyte is an open-source data integration platform used to move data between AP
 
 **Architecture Patterns:**  
 
-- **Connector-based structure:** Main connectors are organized inside the `airbyte-integrations/` directory with separate source and destination modules  
+- **Connector-based structure:** Main connectors are organized inside the `airbyte-integrations/connectors/` directory with separate source and destination modules  
 - **Independent connector execution:** Each connector runs separately from the core platform during sync operations  
 - **Microservice-style deployment:** Different platform services run in isolated Docker containers  
 - **Pipeline-based data flow:** Data moves through extraction, normalization, and loading stages between systems
@@ -93,6 +93,7 @@ archivematica is a digital preservation system used for storing and managing dig
 - **Task queue handling:** Background jobs are processed using Gearman workers and MCP task management services  
 - **Django-based dashboard structure:** The web interface and management system are built around Django applications  
 - **Service-oriented backend design:** Different preservation and processing tasks are separated into independent backend services
+- Relevant workflow and dashboard logic can be seen in the `src/dashboard/` directory and MCP service modules.
   
 **Target Domain:**  
 Used in organizations that need secure digital preservation and archival management.
